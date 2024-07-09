@@ -1,0 +1,137 @@
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container .align-self-end">
+
+        <a href="{% url 'parking'%}">Parking</a>
+        <a href="{% url 'car'%}">Car</a>
+    </div>
+
+
+
+    <div class="container mt-5">
+        <table class="table" id="myTable">
+            <thead>
+                <tr>
+                    <th scope="col">Car Number</th>
+                    <th scope="col">Car Owner</th>
+                    <th scope="col">Owner Phone Number</th>
+                    <th scope="col">Vehicle Type</th>
+                    <th scope="col">Parking Spot</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for car in cars %}
+                <tr>
+                    <td>{{ car.vehicleNumber }}</td>
+                    <td>{{ car.ownerName }}</td>
+                    <td>{{ car.phoneNumber }}</td>
+                    <td>{{ car.vehicleType }}</td>
+                    <td>{{ car.parkingWing }}</td>
+                    <td>
+                        <!-- Button trigger modal with unique id -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target="#exampleModal{{ car.id }}">
+                            Edit
+                        </button>
+                        <form method="POST" action="{% url 'delete_car' %}" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="car_id" value="{{ car.id }}">
+
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                        <!-- Modal with unique id -->
+                        <div class="modal fade" id="exampleModal{{ car.id }}" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel{{ car.id }}" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel{{ car.id }}">Edit Details</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form id="carForm{{ car.id }}" method="POST" action="{% url 'edit_car' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="car_id" value="{{ car.id }}">
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="vehicleNumber{{ car.id }}" class="col-form-label">Car Number:</label>
+                                                <input type="text" class="form-control" id="vehicleNumber{{ car.id }}"
+                                                       name="vehicleNumber" value="{{ car.vehicleNumber }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ownerName{{ car.id }}" class="col-form-label">Owner Name:</label>
+                                                <input type="text" class="form-control" id="ownerName{{ car.id }}"
+                                                       name="ownerName" value="{{ car.ownerName }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="phoneNumber{{ car.id }}" class="col-form-label">Phone Number:</label>
+                                                <input type="text" class="form-control" id="phoneNumber{{ car.id }}"
+                                                       name="phoneNumber" value="{{ car.phoneNumber }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="vehicleType{{ car.id }}" class="col-form-label">Vehicle Type:</label>
+                                                <input type="text" class="form-control" id="vehicleType{{ car.id }}"
+                                                       name="vehicleType" value="{{ car.vehicleType }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="parkingWing{{ car.id }}" class="col-form-label">Parking Wing:</label>
+                                                <select class="form-control" id="parkingWing{{ car.id }}" name="parkingWing">
+                                                    {% for wing in wings %}
+                                                        <option value="{{ wing.id }}" {% if wing.id == car.parkingWing.id %} selected {% endif %}>
+                                                            {{ wing.wingName }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </form>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+
+
+            </tbody>
+        </table>
+
+    </div>
+    </div>
+    </div>
+</body>
+
+</html>
