@@ -6,6 +6,7 @@ from django.views.generic import ListView, DetailView
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.core.signals import request_finished
+import sweetify
 
 
 
@@ -79,10 +80,16 @@ def car_detail_create(request):
         form = addVehicleForm(request.POST)
         
         if form.is_valid():
+            parking_wing=form.cleaned_data['parking_wing']
+            
+            if ParkingDetail.objects.filter(parking_wing=parking_wing, vehicle_left_date__isnull=True).exists():
+                sweetify.error(request, 'The space is occupied already please choose another parking wing')
+                return redirect('car_detail_create')
+            
             car_detail = form.save() 
             parking_detail = ParkingDetail.objects.create(
                 vehicle_number=car_detail,
-                parking_wing=form.cleaned_data['parking_wing'],
+                parking_wing=parking_wing,
                 vehicle_arrived_date=timezone.now()  
             
             )
