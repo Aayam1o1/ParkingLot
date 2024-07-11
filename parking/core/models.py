@@ -58,8 +58,8 @@ class ParkingDetail(models.Model):
     
     
 class OwnerProfile(models.Model):
-    owner_name_profile = models.OneToOneField(CarDetail, on_delete=models.CASCADE, blank = True, null = True, related_name="owner_name_profile")
-    owner_number_profile = models.CharField(max_length=30)
+    owned_car = models.OneToOneField(CarDetail, on_delete=models.CASCADE, blank = True, null = True)
+    number_profile = models.CharField(max_length=30)
     vehicle_number_profile = models.CharField(max_length=30)
     vehicle_type_profile = models.CharField(max_length=30)
     owner_address = models.CharField(max_length=30, blank = True, null = True)

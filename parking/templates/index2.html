@@ -30,7 +30,7 @@
             <a href="{% url 'car_detail_create' %}">Car</a>
             <a href="{% url 'index' %}">Home</a>
         </div>
-        <form method="GET" action="{% url 'index2' %}?date_filter={{ request.GET.date_filter }}">
+        <form method="GET" action="{% url 'car_detail' %}?date_filter={{ request.GET.date_filter }}">
             <div class="d-flex justify-content-between">
                 <input type="date" id="date_filter" name="date_filter" placeholder="filter">                
                 <button type="submit">Search</button>
