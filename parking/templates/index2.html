@@ -52,7 +52,7 @@
                 {% for object in object_list %}
                 <tr>
                     <td>{{ object.vehicle_number }}</td>
-                    <td>{{ object.owner_name }}</td>
+                    <td>{{ object.owner }}</td>
                     <td>{{ object.phone_number }}</td>
                     <td>{{ object.parking_wing }}</td>
                     
@@ -80,6 +80,51 @@
                                 View
                             </button>
                         </form>
+                        <form method="POST" action="{% url 'owner_profile' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="car_id" value="{{ object.id }}">
+                            <!-- Button to trigger modal -->
+                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#viewOwnerModal{{ object.id }}">
+                                Owner
+                            </button>
+                        </form>
+
+
+
+                        <!-- for owner profile detail -->
+                        <div class="modal fade" id="viewOwnerModal{{ object.id }}" tabindex="-1" role="dialog"
+                            aria-labelledby="viewOwnerModalLabel{{ object.id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="viewOwnerModalLabel{{ object.id }}">Owner Details</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {% if object.owner_name_profile %}
+                                            <!-- Display Owner Profile Details -->
+                                            <p><strong>Owner Name:</strong> {{ object.owner_name_profile.owner_name_profile }}</p>
+                                            <p><strong>Phone Number:</strong> {{ object.owner_name_profile.owner_number_profile }}</p>
+                                            <p><strong>Vehicle Number:</strong> {{ object.owner_name_profile.vehicle_number_profile }}</p>
+                                            <p><strong>Vehicle Type:</strong> {{ object.owner_name_profile.vehicle_type_profile }}</p>
+                                            <p><strong>Owner Address:</strong> {{ object.owner_name_profile.owner_address }}</p>
+                                            <p><strong>Owner Gender:</strong> {{ object.owner_name_profile.owner_gender }}</p>
+                                        {% else %}
+                                            <p>No owner profile found.</p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
                         <!-- modal for more detial -->
                         <div class="modal fade" id="viewDetailModal{{ object.id }}" tabindex="-1" role="dialog"
                             aria-labelledby="viewDetailModalLabel{{ object.id }}" aria-hidden="true">
@@ -131,9 +176,9 @@
                                                        name="vehicle_number" value="{{ object.vehicle_number }}">
                                             </div>
                                             <div class="form-group">
-                                                <label for="owner_name{{ object.id }}" class="col-form-label">Owner Name:</label>
-                                                <input type="text" class="form-control" id="owner_name{{ object.id }}"
-                                                       name="owner_name" value="{{ object.owner_name }}">
+                                                <label for="owner{{ object.id }}" class="col-form-label">Owner Name:</label>
+                                                <input type="text" class="form-control" id="owner{{ object.id }}"
+                                                       name="owner" value="{{ object.owner }}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="phone_number{{ object.id }}" class="col-form-label">Phone Number:</label>
@@ -166,7 +211,13 @@
                                     </form>
                                 </div>
                             </div>
+
+                            
                         </div>
+
+                        
+
+                        
                     </td>
                 </tr>
                 {% endfor %}

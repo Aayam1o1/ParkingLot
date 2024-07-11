@@ -12,7 +12,7 @@ class parkingWingForm(forms.ModelForm):
         fields = ['wing_name']
 
 class addVehicleForm(forms.ModelForm):
-    owner_name = forms.CharField(
+    owner = forms.CharField(
         label='Owner Name',
         max_length=50,
         widget=forms.TextInput(attrs={'placeholder': 'Owner Name', 'class': 'form-control'})
@@ -41,12 +41,12 @@ class addVehicleForm(forms.ModelForm):
     
     class Meta:
         model = CarDetail
-        fields = ['owner_name', 'phone_number', 'vehicle_number', 'vehicle_type', 'parking_wing']
+        fields = ['owner', 'phone_number', 'vehicle_number', 'vehicle_type', 'parking_wing']
 
 
 
 class editVehicleForm(forms.ModelForm):
-    owner_name = forms.CharField(
+    owner = forms.CharField(
         label='Owner Name',
         max_length=50,
         widget=forms.TextInput(attrs={'placeholder': 'Owner Name', 'class': 'form-control'})
@@ -75,4 +75,4 @@ class editVehicleForm(forms.ModelForm):
 
     class Meta:
         model = CarDetail
-        fields = ['owner_name', 'phone_number', 'vehicle_number', 'vehicle_type', 'parking_wing', 'parking_wing']
+        fields = ['owner', 'phone_number', 'vehicle_number', 'vehicle_type', 'parking_wing', 'parking_wing']

@@ -4,3 +4,4 @@ from core.models import *
 admin.site.register(Parking),
 admin.site.register(CarDetail),
 admin.site.register(ParkingDetail),
+admin.site.register(OwnerProfile)

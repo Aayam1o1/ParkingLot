@@ -3,6 +3,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import addVehicleForm, parkingWingForm, editVehicleForm
 from .models import *
 from django.views.generic import ListView, DetailView
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.core.signals import request_finished
+
+
 
 def car_detail_view(request):
     """
@@ -59,6 +64,7 @@ def parking(request):
 
     return render(request, 'parking.html', context)
 
+
 def car_detail_create(request):
     """
     This function is used insert new car into the parking sytem
@@ -78,8 +84,9 @@ def car_detail_create(request):
                 vehicle_number=car_detail,
                 parking_wing=form.cleaned_data['parking_wing'],
                 vehicle_arrived_date=timezone.now()  
-
+            
             )
+            
             
             return redirect('/')
     else:
@@ -213,7 +220,7 @@ def parking_delete(request):
 
 # From here class based
 
-class car_detail_view(ListView):
+class CarDetailView(ListView):
     """
     This class is done for viewing details of the car in index2.html.
     Alongside viewing, also deals with the filter of the car details through date.
@@ -249,7 +256,7 @@ class car_detail_view(ListView):
 
     
 
-class car_detail_more_view(DetailView):
+class CarDetailMoreView(DetailView):
     """
     This class is done for viewing more details of the car in index2.html through  modal consisting 
     of data like car name, owner name and number, parking wing and arrived and left date and time
@@ -273,4 +280,36 @@ class car_detail_more_view(DetailView):
         queryset = queryset.filter(parkingdetail__id=car_id)
         return queryset    
     
+    
+    
+class OwnerProfileView(DetailView):
+    """
+    This class is responsible for viewing the owner details with help of the model OwnerProfile
+    showing data like owner name, number, address, gender and vehicle owned
+    
+    parameters: DetailView
+    
+    return:
+    1. queryset(owner details)
+    2. context(car details)
+    
+    """
+    model = OwnerProfile
+    template_name = 'index2.html'
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        car_id = self.request.GET.get('car_id')  
+        
+        car_detail = CarDetail.objects.get(id=car_id)
+        
+        queryset = queryset.filter(owner_name_profile=car_detail)
+        return queryset   
+     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        car_id = self.request.GET.get('car_id')
+        car_detail = CarDetail.objects.get(id=car_id)
+        context['object'] = car_detail  
+        return context
     
