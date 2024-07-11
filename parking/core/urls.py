@@ -18,7 +18,7 @@ urlpatterns = [
 
     # class based urls aba
     path("index2", CarDetailView.as_view(), name='index2'),
-    path("more_car_detail", CarDetailView.as_view(), name='more_car_detial')
+    path("more_car_detail", CarDetailMoreView.as_view(), name='more_car_detial')
 
     
 

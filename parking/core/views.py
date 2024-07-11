@@ -224,8 +224,8 @@ class CarDetailView(ListView):
     """
     model = CarDetail
     template_name = 'index2.html'
-    # queryset = CarDetail.objects.all()
-    
+    context_object_name = 'cars'
+
     
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -233,8 +233,31 @@ class CarDetailView(ListView):
         if datefilter:
             queryset = queryset.filter(parkingdetail__vehicle_arrived_date=datefilter)
         return queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Fetch parking wing details
+        wings = Parking.objects.filter(is_available=True)
+        
+        # Add parking wing details to the context
+        context['wings'] = wings
+        
+        return context
 
+    
 
 class CarDetailMoreView(DetailView):
-    pass
+    model = ParkingDetail
+    template_name = 'index2.html'
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        car_id = self.request.POST.get('car_id')
+        
+
+
+        queryset = queryset.filter(parkingdetail__id=car_id)
+        return queryset    
+    
     
