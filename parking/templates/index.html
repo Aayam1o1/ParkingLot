@@ -29,7 +29,7 @@
 
         <a href="{% url 'parking'%}">Parking</a>
         <a href="{% url 'car_detail_create'%}">Car</a>
-        <a href="{% url 'index2' %}">Index2</a>
+        <a href="{% url 'car_detail' %}">Index2</a>
     </div>
 
 
@@ -56,7 +56,7 @@
                 {% for car in cars %}
                 <tr>
                     <td>{{ car.vehicle_number }}</td>
-                    <td>{{ car.owner_name }}</td>
+                    <td>{{ car.owner }}</td>
                     <td>{{ car.phone_number }}</td>
                     <td>{{ car.vehicle_type }}</td>
                     <td>{{ car.parking_wing }}</td>
@@ -130,9 +130,9 @@
                                                        name="vehicle_number" value="{{ car.vehicle_number }}">
                                             </div>
                                             <div class="form-group">
-                                                <label for="owner_name{{ car.id }}" class="col-form-label">Owner Name:</label>
-                                                <input type="text" class="form-control" id="owner_name{{ car.id }}"
-                                                       name="owner_name" value="{{ car.owner_name }}">
+                                                <label for="owner{{ car.id }}" class="col-form-label">Owner Name:</label>
+                                                <input type="text" class="form-control" id="owner{{ car.id }}"
+                                                       name="owner" value="{{ car.owner }}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="phone_number{{ car.id }}" class="col-form-label">Phone Number:</label>

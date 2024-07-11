@@ -27,7 +27,7 @@ class CarDetail(models.Model):
     
     
     vehicle_number = models.CharField(max_length=30)
-    owner_name = models.CharField(max_length=30)
+    owner = models.CharField(max_length=30)
     phone_number = models.CharField(max_length=10)
     vehicle_type = models.CharField(max_length=30)
     date = models.DateTimeField(default=timezone.now)
@@ -55,3 +55,17 @@ class ParkingDetail(models.Model):
     
     def __str__(self):
         return str(self.vehicle_number)
+    
+    
+class OwnerProfile(models.Model):
+    owned_car = models.OneToOneField(CarDetail, on_delete=models.CASCADE, blank = True, null = True)
+    number_profile = models.CharField(max_length=30)
+    vehicle_number_profile = models.CharField(max_length=30)
+    vehicle_type_profile = models.CharField(max_length=30)
+    owner_address = models.CharField(max_length=30, blank = True, null = True)
+    owner_gender = models.CharField(max_length=30, blank = True, null = True)
+    
+    def __str__(self):
+        return str(self.vehicle_number_profile)
+    
+    
