@@ -213,14 +213,16 @@ def parking_delete(request):
 
 # From here class based
 
-class CarDetailView(ListView):
+class car_detail_view(ListView):
     """
     This class is done for viewing details of the car in index2.html.
     Alongside viewing, also deals with the filter of the car details through date.
     
     parameters: ListView
     
-    returns queryset(containing details of car details)
+    returns:
+    1. queryset(containing details of car details) 
+    2. context(to render wing details for the parking wing)
     """
     model = CarDetail
     template_name = 'index2.html'
@@ -229,9 +231,9 @@ class CarDetailView(ListView):
     
     def get_queryset(self):
         queryset = super().get_queryset()
-        datefilter = self.request.GET.get('date_filter')
-        if datefilter:
-            queryset = queryset.filter(parkingdetail__vehicle_arrived_date=datefilter)
+        date_filter = self.request.GET.get('date_filter')
+        if date_filter:
+            queryset = queryset.filter(parkingdetail__vehicle_arrived_date=date_filter)
         return queryset
     
     def get_context_data(self, **kwargs):
@@ -247,7 +249,18 @@ class CarDetailView(ListView):
 
     
 
-class CarDetailMoreView(DetailView):
+class car_detail_more_view(DetailView):
+    """
+    This class is done for viewing more details of the car in index2.html through  modal consisting 
+    of data like car name, owner name and number, parking wing and arrived and left date and time
+    
+    
+    parameters: DetailView
+    
+    returns:
+    1. queryset(containing details of parking details) 
+    
+    """
     model = ParkingDetail
     template_name = 'index2.html'
     
