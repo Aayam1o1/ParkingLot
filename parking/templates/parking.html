@@ -8,21 +8,95 @@
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 </head>
 <body>
     <form action="" method="POST">
         {% csrf_token %}
         <div class="mx-auto gap-5 w-50 mt-5">
             <a href="{% url 'index' %}">Home</a>
-            <a href="{% url 'car'%}">Car</a>
+            <a href="{% url 'car_detail_create'%}">car</a>
 
             <div class="d-flex justify-content-start gap-5 mt-3">
                 <div class="form-group col-md-6">
-                    {{ form.wingName }}
+                    {{ form.wing_name }}
                 </div>
             </div>
             <button class="mt-3">Add parking spot</button>
         </div>
+
     </form>
+    <div class="mx-auto gap-5 w-50 mt-5">
+        Parking Spots
+        <table class="table" id="myTable">
+            <thead>
+                <tr>
+                    <th scope="col">Parking Wing Name</th>
+                    <th scope="col">Actions</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for wing in wings %}
+                <tr>
+                    <td>{{ wing.wing_name }}</td>
+                    <td>
+                        <!-- Button trigger modal with unique id -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal{{ wing.id }}">
+                            Edit
+                        </button>
+                        <form method="POST" action="{% url 'parking_delete' %}" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="wing_id" value="{{ wing.id }}">
+
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                        <!-- Modal with unique id -->
+                        <div class="modal fade" id="exampleModal{{ wing.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{ wing.id }}" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel{{ wing.id }}">Edit Parking Wing Details</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form id="wingForm{{ wing.id }}" method="POST" action="{% url 'parking_edit' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="wing_id" value="{{ wing.id }}">
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="wing_name{{ wing.id }}" class="col-form-label">Parking Wing Name:</label>
+                                                <input type="text" class="form-control" id="wing_name{{ wing.id }}" name="wing_name" value="{{ wing.wing_name }}">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

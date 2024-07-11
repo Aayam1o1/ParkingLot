@@ -28,7 +28,8 @@
     <div class="container .align-self-end">
 
         <a href="{% url 'parking'%}">Parking</a>
-        <a href="{% url 'car'%}">Car</a>
+        <a href="{% url 'car_detail_create'%}">Car</a>
+        <a href="{% url 'index2' %}">Index2</a>
     </div>
 
 
@@ -42,6 +43,11 @@
                     <th scope="col">Owner Phone Number</th>
                     <th scope="col">Vehicle Type</th>
                     <th scope="col">Parking Spot</th>
+                    <th scope="col">Arrived Date</th>
+                    <th scope="col">Arrived Time</th>
+                    <th scope="col">Left Date</th>
+                    <th scope="col">Left Time</th>
+
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
@@ -49,18 +55,55 @@
                 
                 {% for car in cars %}
                 <tr>
-                    <td>{{ car.vehicleNumber }}</td>
-                    <td>{{ car.ownerName }}</td>
-                    <td>{{ car.phoneNumber }}</td>
-                    <td>{{ car.vehicleType }}</td>
-                    <td>{{ car.parkingWing }}</td>
+                    <td>{{ car.vehicle_number }}</td>
+                    <td>{{ car.owner_name }}</td>
+                    <td>{{ car.phone_number }}</td>
+                    <td>{{ car.vehicle_type }}</td>
+                    <td>{{ car.parking_wing }}</td>
+                    <td>
+
+                        {% for parking in parking %}
+                        {% if parking.vehicle_number_id == car.id %}
+                        {{ parking.vehicle_arrived_date|escape }}
+                        {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for parking in parking %}
+                        {% if parking.vehicle_number_id == car.id %}
+                        {{ parking.vehicle_arrived_time|escape }}
+                        {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        
+                        {% for parking in parking %}
+                        {% if parking.vehicle_number_id == car.id %}
+                        {{ parking.vehicle_left_date|escape }}
+                        {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        
+                        {% for parking in parking %}
+                        {% if parking.vehicle_number_id == car.id %}
+                        {{ parking.vehicle_left_time|escape }}
+                        {% endif %}
+                        {% endfor %}
+                    </td>
                     <td>
                         <!-- Button trigger modal with unique id -->
                         <button type="button" class="btn btn-primary" data-toggle="modal"
                             data-target="#exampleModal{{ car.id }}">
                             Edit
                         </button>
-                        <form method="POST" action="{% url 'delete_car' %}" style="display:inline;">
+                        <form method="POST" action="{% url 'car_detail_checkout' %}" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="car_id" value="{{ car.id }}">
+
+                            <button type="submit" class="btn btn-danger">Checkout</button>
+                        </form>
+                        <form method="POST" action="{% url 'car_detail_delete' %}" style="display:inline;">
                             {% csrf_token %}
                             <input type="hidden" name="car_id" value="{{ car.id }}">
 
@@ -77,36 +120,36 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form id="carForm{{ car.id }}" method="POST" action="{% url 'edit_car' %}">
+                                    <form id="carForm{{ car.id }}" method="POST" action="{% url 'car_detail_edit' %}">
                                         {% csrf_token %}
                                         <input type="hidden" name="car_id" value="{{ car.id }}">
                                         <div class="modal-body">
                                             <div class="form-group">
-                                                <label for="vehicleNumber{{ car.id }}" class="col-form-label">Car Number:</label>
-                                                <input type="text" class="form-control" id="vehicleNumber{{ car.id }}"
-                                                       name="vehicleNumber" value="{{ car.vehicleNumber }}">
+                                                <label for="vehicle_number{{ car.id }}" class="col-form-label">Car Number:</label>
+                                                <input type="text" class="form-control" id="vehicle_number{{ car.id }}"
+                                                       name="vehicle_number" value="{{ car.vehicle_number }}">
                                             </div>
                                             <div class="form-group">
-                                                <label for="ownerName{{ car.id }}" class="col-form-label">Owner Name:</label>
-                                                <input type="text" class="form-control" id="ownerName{{ car.id }}"
-                                                       name="ownerName" value="{{ car.ownerName }}">
+                                                <label for="owner_name{{ car.id }}" class="col-form-label">Owner Name:</label>
+                                                <input type="text" class="form-control" id="owner_name{{ car.id }}"
+                                                       name="owner_name" value="{{ car.owner_name }}">
                                             </div>
                                             <div class="form-group">
-                                                <label for="phoneNumber{{ car.id }}" class="col-form-label">Phone Number:</label>
-                                                <input type="text" class="form-control" id="phoneNumber{{ car.id }}"
-                                                       name="phoneNumber" value="{{ car.phoneNumber }}">
+                                                <label for="phone_number{{ car.id }}" class="col-form-label">Phone Number:</label>
+                                                <input type="text" class="form-control" id="phone_number{{ car.id }}"
+                                                       name="phone_number" value="{{ car.phone_number }}">
                                             </div>
                                             <div class="form-group">
-                                                <label for="vehicleType{{ car.id }}" class="col-form-label">Vehicle Type:</label>
-                                                <input type="text" class="form-control" id="vehicleType{{ car.id }}"
-                                                       name="vehicleType" value="{{ car.vehicleType }}">
+                                                <label for="vehicle_type{{ car.id }}" class="col-form-label">Vehicle Type:</label>
+                                                <input type="text" class="form-control" id="vehicle_type{{ car.id }}"
+                                                       name="vehicle_type" value="{{ car.vehicle_type }}">
                                             </div>
                                             <div class="form-group">
-                                                <label for="parkingWing{{ car.id }}" class="col-form-label">Parking Wing:</label>
-                                                <select class="form-control" id="parkingWing{{ car.id }}" name="parkingWing">
+                                                <label for="parking_wing{{ car.id }}" class="col-form-label">Parking Wing:</label>
+                                                <select class="form-control" id="parking_wing{{ car.id }}" name="parking_wing">
                                                     {% for wing in wings %}
-                                                        <option value="{{ wing.id }}" {% if wing.id == car.parkingWing.id %} selected {% endif %}>
-                                                            {{ wing.wingName }}
+                                                        <option value="{{ wing.id }}" {% if wing.id == car.parking_wing.id %} selected {% endif %}>
+                                                            {{ wing.wing_name }}
                                                         </option>
                                                     {% endfor %}
                                                 </select>
