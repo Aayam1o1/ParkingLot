@@ -11,8 +11,8 @@ def create_owner_profile(sender, instance, created, **kwargs):
     
     if created:
         OwnerProfile.objects.create(
-            owner_name_profile=instance,
-            owner_number_profile=instance.phone_number,
+            owned_car=instance,
+            number_profile=instance.phone_number,
             vehicle_number_profile=instance.vehicle_number,
             vehicle_type_profile=instance.vehicle_type
         )

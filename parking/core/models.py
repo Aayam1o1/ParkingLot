@@ -31,8 +31,8 @@ class CarDetail(models.Model):
     phone_number = models.CharField(max_length=10)
     vehicle_type = models.CharField(max_length=30)
     date = models.DateTimeField(default=timezone.now)
-    parking_wing = models.ForeignKey(Parking, on_delete=models.CASCADE, blank=True)
-    
+    parking_wing = models.ForeignKey(Parking, on_delete=models.CASCADE,  blank=True)
+
     def __str__(self):
         return self.vehicle_number
     
@@ -47,14 +47,14 @@ class ParkingDetail(models.Model):
     """
     vehicle_arrived_date = models.DateField(default=timezone.now)
     vehicle_arrived_time = models.TimeField(default=timezone.now)
-    vehicle_number = models.ForeignKey(CarDetail, on_delete=models.CASCADE, blank=True)
+    vehicles = models.ManyToManyField(CarDetail, blank=True, related_name="parking_details")
     parking_wing = models.ForeignKey(Parking, on_delete=models.CASCADE, blank=True)
     vehicle_left_date = models.DateField(blank = True, null=True)
     vehicle_left_time = models.TimeField(blank=True, null=True)
     vehicle_has_left = models.BooleanField(default=False)
     
     def __str__(self):
-        return str(self.vehicle_number)
+        return str(self.parking_wing)
     
     
 class OwnerProfile(models.Model):
