@@ -80,20 +80,21 @@ def car_detail_create(request):
         form = addVehicleForm(request.POST)
         
         if form.is_valid():
+            car_detail = form.save(commit=False) 
             parking_wing=form.cleaned_data['parking_wing']
             
-            if ParkingDetail.objects.filter(parking_wing=parking_wing, vehicle_left_date__isnull=True).exists():
-                sweetify.error(request, 'The space is occupied already please choose another parking wing')
-                return redirect('car_detail_create')
-            
-            car_detail = form.save() 
+            # if ParkingDetail.objects.filter(parking_wing=parking_wing, vehicle_left_date__isnull=True).exists():
+            #     sweetify.error(request, 'The space is occupied already please choose another parking wing')
+            #     return redirect('car_detail_create')
+            car_detail.save()
             parking_detail = ParkingDetail.objects.create(
-                vehicle_number=car_detail,
                 parking_wing=parking_wing,
-                vehicle_arrived_date=timezone.now()  
+                vehicle_arrived_date=timezone.now(),
+                vehicle_arrived_time=timezone.now() 
             
             )
-            
+            parking_detail.vehicles.add(car_detail)
+
             
             return redirect('/')
     else:
@@ -146,7 +147,7 @@ def car_detail_checkout(request):
         car_id = request.POST.get('car_id')
         vehicle = get_object_or_404(CarDetail, id=car_id)
         
-        parking_detail = get_object_or_404(ParkingDetail, vehicle_number=vehicle)
+        parking_detail = get_object_or_404(ParkingDetail, vehicles=vehicle)
         
         
         if not parking_detail.vehicle_has_left:
@@ -248,16 +249,22 @@ class CarDetailView(ListView):
         date_filter = self.request.GET.get('date_filter')
         if date_filter:
             queryset = queryset.filter(parkingdetail__vehicle_arrived_date=date_filter)
+
         return queryset
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
+        Var = (ParkingDetail.objects.all().values('id', 'vehicle_arrived_date', 'vehicle_arrived_time'))
         # Fetch parking wing details
         wings = Parking.objects.filter(is_available=True)
+        car_detail = ParkingDetail.objects.all().values('vehicles', 'vehicle_arrived_date', 'vehicle_arrived_time', 'parking_wing', 'vehicle_left_time', 'vehicle_left_date')
+        
         
         # Add parking wing details to the context
         context['wings'] = wings
+        context['var'] = Var[0]
+        context['car_detail'] = car_detail
+
         
         return context
 
@@ -277,14 +284,16 @@ class CarDetailMoreView(DetailView):
     """
     model = ParkingDetail
     template_name = 'index2.html'
+    context_object_name = 'parking_detail'  
     
     def get_queryset(self):
         queryset = super().get_queryset()
-        car_id = self.request.POST.get('car_id')
+        car_id = self.request.GET.get('car_id')  
         
+        # Filter queryset to retrieve details related to the specific car_id
+        if car_id:
+            queryset = queryset.filter(vehicles__id=car_id).first()
 
-
-        queryset = queryset.filter(parkingdetail__id=car_id)
         return queryset    
     
     
@@ -310,13 +319,13 @@ class OwnerProfileView(DetailView):
         
         car_detail = CarDetail.objects.get(id=car_id)
         
-        queryset = queryset.filter(owner_name_profile=car_detail)
+        queryset = queryset.filter(owned_car=car_detail)
         return queryset   
      
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         car_id = self.request.GET.get('car_id')
-        car_detail = CarDetail.objects.get(id=car_id)
-        context['object'] = car_detail  
+        # car_detail = CarDetail.objects.get(id=car_id)
+        context['object'] = OwnerProfile.objects.get(owned_car__id=car_id)
         return context
     

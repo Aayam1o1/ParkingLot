@@ -61,34 +61,26 @@
                     <td>{{ car.vehicle_type }}</td>
                     <td>{{ car.parking_wing }}</td>
                     <td>
-
-                        {% for parking in parking %}
-                        {% if parking.vehicle_number_id == car.id %}
-                        {{ parking.vehicle_arrived_date|escape }}
-                        {% endif %}
+                        
+                        {% for parking_detail in car.parking_details.all %}
+                            {{ parking_detail.vehicle_arrived_date }}
                         {% endfor %}
                     </td>
                     <td>
-                        {% for parking in parking %}
-                        {% if parking.vehicle_number_id == car.id %}
-                        {{ parking.vehicle_arrived_time|escape }}
-                        {% endif %}
+                        {% for parking_detail in car.parking_details.all %}
+                            {{ parking_detail.vehicle_arrived_time }}
                         {% endfor %}
                     </td>
                     <td>
                         
-                        {% for parking in parking %}
-                        {% if parking.vehicle_number_id == car.id %}
-                        {{ parking.vehicle_left_date|escape }}
-                        {% endif %}
+                        {% for parking_detail in car.parking_details.all %}
+                            {{ parking_detail.vehicle_left_date }}
                         {% endfor %}
                     </td>
                     <td>
                         
-                        {% for parking in parking %}
-                        {% if parking.vehicle_number_id == car.id %}
-                        {{ parking.vehicle_left_time|escape }}
-                        {% endif %}
+                        {% for parking_detail in car.parking_details.all %}
+                            {{ parking_detail.vehicle_left_time }}
                         {% endfor %}
                     </td>
                     <td>

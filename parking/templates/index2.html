@@ -55,7 +55,6 @@
                     <td>{{ object.owner }}</td>
                     <td>{{ object.phone_number }}</td>
                     <td>{{ object.parking_wing }}</td>
-                    
                     <td>
                         <!-- Button trigger modal with unique id -->
                         <button type="button" class="btn btn-primary" data-toggle="modal"
@@ -103,17 +102,16 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        {% if object.owner_name_profile %}
-                                            <!-- Display Owner Profile Details -->
-                                            <p><strong>Owner Name:</strong> {{ object.owner_name_profile.owner_name_profile }}</p>
-                                            <p><strong>Phone Number:</strong> {{ object.owner_name_profile.owner_number_profile }}</p>
-                                            <p><strong>Vehicle Number:</strong> {{ object.owner_name_profile.vehicle_number_profile }}</p>
-                                            <p><strong>Vehicle Type:</strong> {{ object.owner_name_profile.vehicle_type_profile }}</p>
-                                            <p><strong>Owner Address:</strong> {{ object.owner_name_profile.owner_address }}</p>
-                                            <p><strong>Owner Gender:</strong> {{ object.owner_name_profile.owner_gender }}</p>
-                                        {% else %}
-                                            <p>No owner profile found.</p>
-                                        {% endif %}
+                                        {% if object.ownerprofile %}
+                                        <p><strong>Owner Name:</strong> {{ object.ownerprofile.owned_car }}</p>
+                                        <p><strong>Phone Number:</strong> {{ object.ownerprofile.number_profile }}</p>
+                                        <p><strong>Vehicle Number:</strong> {{ object.ownerprofile.vehicle_number_profile }}</p>
+                                        <p><strong>Vehicle Type:</strong> {{ object.ownerprofile.vehicle_type_profile }}</p>
+                                        <p><strong>Owner Address:</strong> {{ object.ownerprofile.owner_address }}</p>
+                                        <p><strong>Owner Gender:</strong> {{ object.ownerprofile.owner_gender }}</p>
+                                    {% else %}
+                                        <p>No owner profile found.</p>
+                                    {% endif %}
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -139,20 +137,26 @@
                                     <div class="modal-body">
                                         <!-- Car details displayed here -->
                                         <p><strong>Car Number:</strong> {{ object.vehicle_number }}</p>
-                                        <p><strong>Owner Name:</strong> {{ object.owner_name }}</p>
+                                        <p><strong>Owner Name:</strong> {{ object.owner }}</p>
                                         <p><strong>Phone Number:</strong> {{ object.phone_number }}</p>
                                         <p><strong>Vehicle Type:</strong> {{ object.vehicle_type }}</p>
                                         <p><strong>Parking Spot:</strong> {{ object.parking_wing }}</p>
-                                        <p><strong>Arrival Date:</strong> {{ object.parkingdetail_set.first.vehicle_arrived_date }}</p>
-                                        <p><strong>Arrival Time:</strong> {{ object.parkingdetail_set.first.vehicle_arrived_time }}</p>
-                                        <p><strong>Left Date:</strong> {{ object.parkingdetail_set.first.vehicle_left_date }}</p>
-                                        <p><strong>Left Time:</strong> {{ object.parkingdetail_set.first.vehicle_left_time }}</p>
+                                        
+                                        {% for obj in car_detail %}
+                                            <p><strong>Arrival Date:</strong> {{ obj.vehicle_arrived_date }}</p>
+                                            <p><strong>Arrival Time:</strong>{{ obj.vehicle_arrived_time|time:"H:i:s" }}</p>
+                                            <p><strong>Left Date:</strong> {{ obj.vehicle_left_date }}</p>
+                                            <p><strong>Left Time:</strong> {{ obj.vehicle_left_time }}</p>
+                                        {% endfor %}
+                                        
+
+                                     
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                     </div>
                                 </div>
-                            </div>
+                            
                         </div>
 
                         <!-- Modal with unique id -->
