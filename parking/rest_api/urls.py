@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from rest_api.views import ParkingCreateAPIView, ParkingUpdateAPIView, ParkingListAPIView, ParkingDestroyAPIView, ParkingRetrieveAPIView, VehicleDetailViewSet, ParkingDetailViewSet, UserCreateView, CustomTokenObtainPairView
+from rest_api.views import ParkingCreateAPIView, ParkingUpdateAPIView, ParkingListAPIView, ParkingDestroyAPIView, ParkingRetrieveAPIView, VehicleDetailViewSet, ParkingDetailViewSet, UserCreateView,ParkingDetailCreateAPIView, CustomTokenObtainPairView
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -18,7 +18,8 @@ urlpatterns = [
     path('parking_list/',ParkingListAPIView.as_view(), name='parking_list'),
     path('parking_delete/<pk>/', ParkingDestroyAPIView.as_view(), name='parking_delete'),
     path('parking/retrieve/<pk>/', ParkingRetrieveAPIView.as_view(), name='parking_retrive'),
-    
+    path('parking/detail/create/', ParkingDetailCreateAPIView.as_view(), name='parking_detail_create'),
+
     
     # for viewset
     path('', include(router.urls)),
