@@ -10,7 +10,8 @@ from .serializers import UserSerializer, CustomTokenObtainPairSerializer
 from rest_framework.permissions import BasePermission
 from rest_api.permissions import IsAdminUser, IsEmployee, IsOwner
 from rest_framework.permissions import IsAuthenticated
-
+from rest_framework.pagination import PageNumberPagination
+from rest_api.pagination import *
 
 # Create your views here.
 # Generics API
@@ -25,10 +26,15 @@ class ParkingUpdateAPIView(UpdateAPIView):
     serializer_class=ParkingSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
 
-class ParkingListAPIView(ListAPIView):
+
+
+    
+class ParkingListAPIView(ListAPIView, PageNumberPagination):
     queryset=Parking.objects.all()
     serializer_class=ParkingSerializer
     permission_classes = [IsAuthenticated, IsAdminUser, IsEmployee]
+    pagination_class=CustomCursorPagination
+
 
 
 
@@ -48,7 +54,8 @@ class ParkingDetailCreateAPIView(CreateAPIView):
     queryset = ParkingDetail.objects.all()
     serializer_class = ParkingDetailSerializer
     permission_classes = [IsAuthenticated, IsEmployee, IsAdminUser]
-  
+    pagination_class=CustomLimitOffsetPagination
+
     
 # Viewset
 # @method_decorator(csrf_exempt, name='dispatch')
@@ -56,6 +63,8 @@ class ParkingDetailCreateAPIView(CreateAPIView):
 class VehicleDetailViewSet(viewsets.ModelViewSet):
     serializer_class = VehicleDetailSerializer
     permission_classes = [IsAuthenticated, IsOwner]
+    pagination_class=CustomLimitOffsetPagination
+
 
     def get_queryset(self):
         return VehicleDetail.objects.filter(owner=self.request.user)
@@ -64,6 +73,7 @@ class VehicleDetailViewSet(viewsets.ModelViewSet):
 class ParkingDetailViewSet(viewsets.ModelViewSet):
     serializer_class = ParkingDetailSerializer
     permission_classes = [IsAuthenticated, IsOwner]  
+    pagination_class=CustomLimitOffsetPagination
 
     def get_queryset(self):
         # Ensure the authenticated user has a VehicleOwner instance associated
