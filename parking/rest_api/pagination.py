@@ -17,6 +17,6 @@ class CustomLimitOffsetPagination(LimitOffsetPagination):
     
     
 class CustomCursorPagination(CursorPagination):
-    page_size = 1
+    page_size = 5
     cursor_query_param = 'cursor'
     ordering = '-id'

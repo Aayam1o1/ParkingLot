@@ -12,6 +12,8 @@ from rest_api.permissions import IsAdminUser, IsEmployee, IsOwner
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from rest_api.pagination import *
+from django_filters import rest_framework as filters
+from rest_api.filters import ParkingDetailFilter
 
 # Create your views here.
 # Generics API
@@ -73,12 +75,15 @@ class VehicleDetailViewSet(viewsets.ModelViewSet):
 class ParkingDetailViewSet(viewsets.ModelViewSet):
     serializer_class = ParkingDetailSerializer
     permission_classes = [IsAuthenticated, IsOwner]  
-    pagination_class=CustomLimitOffsetPagination
-
+    # pagination_class=CustomLimitOffsetPagination
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = ParkingDetailFilter
     def get_queryset(self):
         # Ensure the authenticated user has a VehicleOwner instance associated
         user = self.request.user
-        if hasattr(user, 'vehicle_owner'):
+        if  user.is_superuser:
+            return ParkingDetail.objects.all()
+        elif hasattr(user, 'vehicle_owner'):
             # Filter parking details based on the owner's vehicles
             return ParkingDetail.objects.filter(vehicles__owner=user.vehicle_owner)
         else:
