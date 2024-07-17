@@ -8,7 +8,7 @@ from django.db.models.signals import post_save
 class ParkingSerializer(serializers.ModelSerializer):
     class Meta:
         model=Parking
-        fields = ['id', 'wing_name', 'is_available']
+        fields = ('id', 'wing_name', 'is_available')
         # fields = '__all__' 
         
         
