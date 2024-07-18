@@ -58,13 +58,13 @@ class ParkingDetail(models.Model):
     
     
 class OwnerProfile(models.Model):
-    owned_car = models.OneToOneField(CarDetail, on_delete=models.CASCADE, blank = True, null = True)
-    number_profile = models.CharField(max_length=30)
-    vehicle_number_profile = models.CharField(max_length=30)
-    vehicle_type_profile = models.CharField(max_length=30)
-    owner_address = models.CharField(max_length=30, blank = True, null = True)
-    owner_gender = models.CharField(max_length=30, blank = True, null = True)
-    
+    owned_car = models.OneToOneField(CarDetail, on_delete=models.CASCADE, blank=True, null=True)
+    number_profile = models.CharField(max_length=50)  # Adjusted length
+    vehicle_number_profile = models.CharField(max_length=50)  # Adjusted length
+    vehicle_type_profile = models.CharField(max_length=50)  # Adjusted length
+    owner_address = models.CharField(max_length=100, blank=True, null=True)
+    owner_gender = models.CharField(max_length=50, blank=True, null=True)  # Adjusted length
+
     def __str__(self):
         return str(self.vehicle_number_profile)
     
