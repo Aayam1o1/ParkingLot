@@ -14,6 +14,9 @@ from rest_framework.pagination import PageNumberPagination
 from rest_api.pagination import *
 from django_filters import rest_framework as filters
 from rest_api.filters import ParkingDetailFilter
+import logging
+from rest_api.tasks import send_registration_email 
+
 
 # Create your views here.
 # Generics API
@@ -92,10 +95,20 @@ class ParkingDetailViewSet(viewsets.ModelViewSet):
     
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 class UserCreateView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    
+    # def perform_create(self, serializer):
+    #     user = serializer.save()
+    #     try:
+    #         send_registration_email.delay(user.email)
+    #         print(send_registration_email.delay(user.email))
+    #     except Exception as e:
+    #         print(f"Failed to queue email task for {user.email}: {str(e)}")
+    
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer

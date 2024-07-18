@@ -9,6 +9,7 @@ class IsEmployee(BasePermission):
         return bool(request.user and request.user.is_authenticated and request.user.is_employee)
 
 class IsOwner(BasePermission):
+    
     def has_object_permission(self, request, view, obj):
         # Check if the requesting user owns any vehicle associated with the parking detail
         user = request.user

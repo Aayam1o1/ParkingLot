@@ -52,7 +52,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_api',
     'rest_framework_simplejwt',
-    'django_filters'
+    'django_filters',
+    'django_extensions',
+    'django_celery_results',
+    'django_celery_beat'
     
 ]
 
@@ -182,3 +185,36 @@ SIMPLE_JWT = {
     'TOKEN_TYPE_CLAIM': env('TOKEN_TYPE_CLAIM'),
     'JTI_CLAIM': env('JTI_CLAIM'),
 }
+
+
+#celery settings
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+  
+# set the celery result backend 
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+# Email setup
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'nepalicious.webapp@gmail.com' 
+EMAIL_HOST_PASSWORD = 'qhyj hptr gpda lwgb'
+EMAIL_USE_SSL = False
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'nepalicious.webapp@gmail.com'
+
+CELERY_BROKER_URL = env('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = env('CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP', cast=bool)
+
+# Email settings
+EMAIL_BACKEND = env('EMAIL_BACKEND')
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT', cast=int)
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_USE_SSL = env('EMAIL_USE_SSL', cast=bool)
+EMAIL_USE_TLS = env('EMAIL_USE_TLS', cast=bool)
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
