@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "parking"
+version = "0.1.0"
+description = ""
+authors = ["Aayam <aayam.maharjan3@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^5.0.7"
+celery = "^5.4.0"
+redis = "^5.0.7"
+sudo = "^1.0.0"
+django-celery-results = "^2.5.1"
+django-celery-beat = "^2.6.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.2"
+django-extensions = "^3.2.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

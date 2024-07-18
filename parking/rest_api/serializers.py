@@ -3,6 +3,8 @@ from rest_api.models import Parking, VehicleDetail, ParkingDetail, CustomUser, V
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.db.models.signals import post_save
+from rest_api.tasks import send_registration_email 
+import logging
 
 
 class ParkingSerializer(serializers.ModelSerializer):
@@ -50,8 +52,26 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'email', 'password', 'first_name', 'last_name', 'is_active', 'is_staff', 'date_joined', 'is_employee', 'is_owner')
     
     def create(self,  validated_data):
-        user = CustomUser.objects.create_user(**validated_data)
+        # user = CustomUser.objects.create_user(**validated_data)
         print("🐍 File: rest_api/serializers.py | Line: 37 | create ~ validated_data",validated_data)
+        
+        send_registration_email.delay(validated_data['email'])
+
+        return validated_data
+    # def create(self, validated_data):
+    #     user = CustomUser.objects.create_user(**validated_data)
+    #     print("User created with email:", user.email)
+        
+        # logging.info(f"User created with email: {user.email}")
+        # try:
+        #     send_registration_email.delay(user.email)
+        #     print(send_registration_email.delay(user.email), "adasdad")
+        #     print(f"Task to send email to {user.email} has been queued.")
+        #     logging.info(f"Task to send email to {user.email} has been queued.")
+        # except Exception as e:
+        #     print(f"Failed to queue email task for {user.email}: {str(e)}")
+        #     logging.error(f"Failed to queue email task for {user.email}: {str(e)}")
+        
         return user
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
