@@ -15,9 +15,9 @@
         <a href="{% url 'index' %}">Home</a>
         <a href="{% url 'parking'%}">Car</a>
         <h2 class="mt-3">Car Parking Details</h2>
-        <form action="" method="post">  
+        <form action="" method="post">
             {% csrf_token %}
-            
+
             <div class="d-flex justify-content-start gap-5">
                 <div class="form-group col-md-6">
                     <label for="owner">Owner Name</label>

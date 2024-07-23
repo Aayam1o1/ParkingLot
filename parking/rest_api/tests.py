@@ -1,5 +1,6 @@
-from django.test import TestCase
 from celery import shared_task
+from django.test import TestCase
+
 
 # Create your tests here.
 @shared_task

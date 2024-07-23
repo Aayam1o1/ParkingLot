@@ -13,11 +13,17 @@ redis = "^5.0.7"
 sudo = "^1.0.0"
 django-celery-results = "^2.5.1"
 django-celery-beat = "^2.6.0"
+django-decouple = "^2.1"
+django-sphinxdoc = "^2.0.0"
+pytest = "^8.3.1"
+pytest-django = "^4.8.0"
+factory-boy = "^3.3.0"
 
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.2"
 django-extensions = "^3.2.3"
+pre-commit = "^3.7.1"
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,6 +1,11 @@
 from django.contrib import admin
-from rest_api.models import Parking, VehicleDetail, ParkingDetail, CustomUser,VehicleOwner
-
+from rest_api.models import (
+    CustomUser,
+    Parking,
+    ParkingDetail,
+    VehicleDetail,
+    VehicleOwner,
+)
 
 # Register your models here.
 admin.site.register(Parking),
