@@ -8,19 +8,64 @@ from rest_api.models import (
     ParkingDetail,
     VehicleDetail,
     VehicleOwner,
+    
 )
 from rest_api.tasks import send_registration_email
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_api.models import Document, Comment
 
 
 class ParkingSerializer(serializers.ModelSerializer):
+    wing_name_en = serializers.CharField(required=True, allow_null=False)
+    wing_name_ne = serializers.CharField(required=True, allow_null=False)
+
     class Meta:
         model = Parking
-        fields = ("id", "wing_name", "is_available")
-        # fields = '__all__'
+        fields = ("id", "wing_name_en", "wing_name_ne", "is_available")
 
+    def create(self, validated_data):
+        wing_name_en = validated_data.pop('wing_name_en', None)
 
+        # Set wing_name to wing_name_en if provided
+        if wing_name_en is not None:
+            validated_data['wing_name'] = wing_name_en
+
+        # Create the Parking instance
+        instance = super().create(validated_data)
+        return instance
+
+    def update(self, instance, validated_data):
+        wing_name_en = validated_data.pop('wing_name_en', None)
+
+        # Update wing_name if wing_name_en is provided
+        if wing_name_en is not None:
+            instance.wing_name = wing_name_en
+
+        # Update other fields
+        instance.is_available = validated_data.get('is_available', instance.is_available)
+
+        instance.save()
+        return instance
+    
+    def to_representation(self, instance):
+        # Call the parent method to get the initial representation
+        representation = super().to_representation(instance)
+
+        # Check if the request path contains 'ne'
+        request = self.context.get('request')
+        if request and 'ne' in request.path:
+            return {
+                'id': representation['id'],
+                'wing_name_ne': representation['wing_name_ne'],
+                'is_available': representation['is_available']
+            }
+        else:
+            return {
+                'id': representation['id'],
+                'wing_name_en': representation['wing_name_en'],
+                'is_available': representation['is_available']
+            }
 class VehicleOwnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = VehicleOwner
@@ -136,3 +181,18 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add custom claims
         token["email"] = user.email
         return token
+
+
+class ParkingReportSerializer(serializers.Serializer):
+    file = serializers.FileField()
+    
+
+class DocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Document
+        fields = ['id', 'title', 'file']
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['id', 'user', 'content', 'page', 'x1', 'y1', 'x2', 'y2', 'whole_page', 'document']

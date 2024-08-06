@@ -1,0 +1,50 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-30 15:32+0545\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\core\views.py:254
+msgid "Welcome to our site"
+msgstr "हाम्रो साइटमा स्वागत छ"
+
+#: .\core\views.py:285
+msgid "Filter by date"
+msgstr "मितिद्वारा फिल्टर गर्नुहोस्"
+
+#: .\core\views.py:286
+msgid "No results found."
+msgstr "कुनै नतिजा फेला परेन।"
+
+#: .\templates\index2.html:8 .\templates\index2.html:25
+msgid "This is class based"
+msgstr "यो कक्षा आधारित छ"
+
+#: .\templates\index2.html:29
+msgid "Parking"
+msgstr "पार्किङ"
+
+#: .\templates\index2.html:30
+msgid "Car"
+msgstr "कार"
+
+#: .\templates\index2.html:31
+msgid "Home"
+msgstr "घर"
+
+#: .\templates\index2.html:44
+msgid "Car Number"
+msgstr ""

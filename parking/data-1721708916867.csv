@@ -1,6 +1,0 @@
-"id","password","last_login","is_superuser","email","first_name","last_name","is_active","is_staff","date_joined","is_employee","is_owner"
-"1","pbkdf2_sha256$720000$CMf0dLQsr6S7kqALCiDcNY$30C+onfHsaObl69GIhcjcq63+LfUXGxJKX0TVj1ecno=","2024-07-23 09:34:01.06799+05:45",True,"aayam@gmail.com","","",True,True,"2024-07-16 15:45:55+05:45",True,True
-"2","pbkdf2_sha256$720000$HN9wkBnS8TyZBjqliCYrt6$iLho24jl9q+2LITRhefnzEL8YKbgXagYgkkiNbtWl5c=",NULL,False,"radar@example.com","","",True,False,"2024-07-16 16:12:50.002626+05:45",False,True
-"3","password123",NULL,False,"aavash@gmail.com","aavash","maharjan",True,False,"2024-07-16 16:32:23+05:45",False,True
-"4","pbkdf2_sha256$720000$R8sRFnzgLKIsujZQ7Vcw9m$f8j/9FKrbdAtcJ1UDQzLERuDWUCka9i9BWqkHzv/OiQ=",NULL,False,"sriyan@gmail.com","","",True,False,"2024-07-17 10:48:29.366751+05:45",False,True
-"22","pbkdf2_sha256$720000$rRxZKpcOFt0dKSQimPqsuC$I9dkNoXUn3jHeysAzug1Kb9FdWiaj3LbU2pEexmx10U=",NULL,False,"newuser@gmail.com","","",True,False,"2024-07-23 10:06:21.981143+05:45",False,False

@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from datetime import datetime, timedelta
 from pathlib import Path
-
+from django.utils.translation import gettext_lazy as _
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -33,11 +33,13 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
+CROS_ORIGIN_ALLOW_ALL = True
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    "modeltranslation",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -54,18 +56,60 @@ INSTALLED_APPS = [
     "django_extensions",
     "django_celery_results",
     "django_celery_beat",
+    "import_export",
+    "translations",
+    "rosetta",
+    "corsheaders"
+   
 ]
-
+# INSTALLED_APPS = [
+#     # Django apps
+#     'django.contrib.admin',
+#     'django.contrib.auth',
+#     'django.contrib.contenttypes',
+#     'django.contrib.sessions',
+#     'django.contrib.messages',
+#     'django.contrib.staticfiles',
+    
+#     # Third-party apps
+#     'modeltranslation',
+#     'corsheaders',
+#     'rest_framework',
+#     'rest_framework_simplejwt',
+#     'django_filters',
+#     'django_extensions',
+#     'django_celery_results',
+#     'django_celery_beat',
+#     'import_export',
+#     'rosetta',
+    
+#     # Your apps
+#     'rest_api',
+# ]
+#for translation
+USE_I18N = True
+USE_L10N = True         
 
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    # 'django.middleware.csrf.CsrfViewMiddleware',
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'modeltranslation.middleware.TranslationMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
+
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+ROSETTA_GETTEXT_PROCESSORS = [
+    'rosetta.gettext_processors.DjangoGettextProcessor',
+]
+ROSETTA_ENABLE_TRANSLATION_SUGGESTIONS = True
 
 ROOT_URLCONF = "parking.urls"
 
@@ -107,6 +151,7 @@ DATABASES = {
         "USER": env("DATABASE_USER"),
         "PASSWORD": env("DATABASE_PASS"),
         "HOST": "localhost",
+        # "HOST": "db",  #for docker
         "PORT": "5432",
     }
 }
@@ -139,8 +184,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en"
+LANGUAGES = [
+    ('en', _('English')),
+    ('ne', _('Nepali')),
+]
 
+LOCALE_PATHS = [BASE_DIR / 'locale']
 TIME_ZONE = "Asia/Kathmandu"
 
 USE_I18N = True
@@ -219,3 +269,16 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 EMAIL_USE_SSL = env("EMAIL_USE_SSL", cast=bool)
 EMAIL_USE_TLS = env("EMAIL_USE_TLS", cast=bool)
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
+
+
+STATICFILES_DIRS =[
+    BASE_DIR / "static"
+]
+
+# MEDIA_ROOT = BASE_DIR / 'static/images'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+import os
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
