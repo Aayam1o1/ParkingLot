@@ -7,18 +7,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0016_alter_cardetail_date'),
+        ("core", "0016_alter_cardetail_date"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='parkingdetail',
-            name='vehicle_arrived_date',
+            model_name="parkingdetail",
+            name="vehicle_arrived_date",
             field=models.DateTimeField(default=django.utils.timezone.now),
         ),
         migrations.AlterField(
-            model_name='parkingdetail',
-            name='vehicle_left_date',
+            model_name="parkingdetail",
+            name="vehicle_left_date",
             field=models.DateTimeField(default=django.utils.timezone.now),
         ),
     ]

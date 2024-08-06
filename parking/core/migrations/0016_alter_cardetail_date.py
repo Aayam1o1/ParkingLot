@@ -7,13 +7,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0015_parkingdetail_vehicle_has_left_and_more'),
+        ("core", "0015_parkingdetail_vehicle_has_left_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='cardetail',
-            name='date',
+            model_name="cardetail",
+            name="date",
             field=models.DateTimeField(default=django.utils.timezone.now),
         ),
     ]

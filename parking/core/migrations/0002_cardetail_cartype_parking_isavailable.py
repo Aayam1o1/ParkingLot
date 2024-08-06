@@ -6,19 +6,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0001_initial'),
+        ("core", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='cardetail',
-            name='carType',
+            model_name="cardetail",
+            name="carType",
             field=models.CharField(default=0.0003842775581906017, max_length=30),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='parking',
-            name='isAvailable',
+            model_name="parking",
+            name="isAvailable",
             field=models.BooleanField(default=True),
         ),
     ]

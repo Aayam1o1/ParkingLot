@@ -7,19 +7,21 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0014_remove_parkingdetail_vehicle_left_date'),
+        ("core", "0014_remove_parkingdetail_vehicle_left_date"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='parkingdetail',
-            name='vehicle_has_left',
+            model_name="parkingdetail",
+            name="vehicle_has_left",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='parkingdetail',
-            name='vehicle_left_date',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            model_name="parkingdetail",
+            name="vehicle_left_date",
+            field=models.DateTimeField(
+                auto_now_add=True, default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
     ]

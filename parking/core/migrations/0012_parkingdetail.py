@@ -7,18 +7,40 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0011_rename_isavailable_parking_is_available'),
+        ("core", "0011_rename_isavailable_parking_is_available"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ParkingDetail',
+            name="ParkingDetail",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('car_arrived_date', models.DateTimeField(auto_now_add=True)),
-                ('car_left_date', models.DateTimeField(auto_now=True)),
-                ('parking_wing', models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, to='core.parking')),
-                ('vehicle_number', models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, to='core.cardetail')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("car_arrived_date", models.DateTimeField(auto_now_add=True)),
+                ("car_left_date", models.DateTimeField(auto_now=True)),
+                (
+                    "parking_wing",
+                    models.ForeignKey(
+                        blank=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="core.parking",
+                    ),
+                ),
+                (
+                    "vehicle_number",
+                    models.ForeignKey(
+                        blank=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="core.cardetail",
+                    ),
+                ),
             ],
         ),
     ]

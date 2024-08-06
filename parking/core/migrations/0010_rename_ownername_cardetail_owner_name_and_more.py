@@ -6,43 +6,45 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0009_rename_vehicleowner_cardetail_ownername_and_more'),
+        ("core", "0009_rename_vehicleowner_cardetail_ownername_and_more"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='cardetail',
-            old_name='ownerName',
-            new_name='owner_name',
+            model_name="cardetail",
+            old_name="ownerName",
+            new_name="owner_name",
         ),
         migrations.RenameField(
-            model_name='cardetail',
-            old_name='parkingWing',
-            new_name='parking_wing',
+            model_name="cardetail",
+            old_name="parkingWing",
+            new_name="parking_wing",
         ),
         migrations.RenameField(
-            model_name='cardetail',
-            old_name='phoneNumber',
-            new_name='phone_number',
+            model_name="cardetail",
+            old_name="phoneNumber",
+            new_name="phone_number",
         ),
         migrations.RenameField(
-            model_name='cardetail',
-            old_name='vehicleNumber',
-            new_name='vehicle_number',
+            model_name="cardetail",
+            old_name="vehicleNumber",
+            new_name="vehicle_number",
         ),
         migrations.RenameField(
-            model_name='cardetail',
-            old_name='vehicleType',
-            new_name='vehicle_type',
+            model_name="cardetail",
+            old_name="vehicleType",
+            new_name="vehicle_type",
         ),
         migrations.RemoveField(
-            model_name='parking',
-            name='wingName',
+            model_name="parking",
+            name="wingName",
         ),
         migrations.AddField(
-            model_name='parking',
-            name='wing_name',
-            field=models.CharField(default=0.00034584980237154146, max_length=30, unique=True),
+            model_name="parking",
+            name="wing_name",
+            field=models.CharField(
+                default=0.00034584980237154146, max_length=30, unique=True
+            ),
             preserve_default=False,
         ),
     ]

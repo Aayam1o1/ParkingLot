@@ -52,7 +52,7 @@
                 </tr>
             </thead>
             <tbody>
-                
+
                 {% for car in cars %}
                 <tr>
                     <td>{{ car.vehicle_number }}</td>
@@ -61,7 +61,7 @@
                     <td>{{ car.vehicle_type }}</td>
                     <td>{{ car.parking_wing }}</td>
                     <td>
-                        
+
                         {% for parking_detail in car.parking_details.all %}
                             {{ parking_detail.vehicle_arrived_date }}
                         {% endfor %}
@@ -72,13 +72,13 @@
                         {% endfor %}
                     </td>
                     <td>
-                        
+
                         {% for parking_detail in car.parking_details.all %}
                             {{ parking_detail.vehicle_left_date }}
                         {% endfor %}
                     </td>
                     <td>
-                        
+
                         {% for parking_detail in car.parking_details.all %}
                             {{ parking_detail.vehicle_left_time }}
                         {% endfor %}
@@ -152,7 +152,7 @@
                                             <button type="submit" class="btn btn-primary">Save changes</button>
                                         </div>
                                     </form>
-                                    
+
                                 </div>
                             </div>
                         </div>

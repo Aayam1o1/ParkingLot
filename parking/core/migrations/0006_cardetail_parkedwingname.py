@@ -6,14 +6,27 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0005_alter_parking_wingname'),
+        ("core", "0005_alter_parking_wingname"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='cardetail',
-            name='parkedWingName',
-            field=models.CharField(choices=[('A1', 'A1'), ('A2', 'A2'), ('A3', 'A3'), ('B1', 'B1'), ('B2', 'B2'), ('B3', 'B3'), ('C1', 'C1'), ('C2', 'C2')], default=0.0003842775581906017, max_length=30),
+            model_name="cardetail",
+            name="parkedWingName",
+            field=models.CharField(
+                choices=[
+                    ("A1", "A1"),
+                    ("A2", "A2"),
+                    ("A3", "A3"),
+                    ("B1", "B1"),
+                    ("B2", "B2"),
+                    ("B3", "B3"),
+                    ("C1", "C1"),
+                    ("C2", "C2"),
+                ],
+                default=0.0003842775581906017,
+                max_length=30,
+            ),
             preserve_default=False,
         ),
     ]

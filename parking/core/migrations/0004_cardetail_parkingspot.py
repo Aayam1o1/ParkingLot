@@ -7,14 +7,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0003_rename_carownernumber_cardetail_ownernumber_and_more'),
+        ("core", "0003_rename_carownernumber_cardetail_ownernumber_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='cardetail',
-            name='parkingSpot',
-            field=models.ForeignKey(default=0.0003842775581906017, on_delete=django.db.models.deletion.CASCADE, to='core.parking'),
+            model_name="cardetail",
+            name="parkingSpot",
+            field=models.ForeignKey(
+                default=0.0003842775581906017,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="core.parking",
+            ),
             preserve_default=False,
         ),
     ]

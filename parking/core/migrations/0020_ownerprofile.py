@@ -7,18 +7,62 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0019_parkingdetail_vehicle_arrived_time_and_more'),
+        ("core", "0019_parkingdetail_vehicle_arrived_time_and_more"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='OwnerProfile',
+            name="OwnerProfile",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('owner_name_profile', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='owner_name_profile', to='core.cardetail')),
-                ('owner_number_profile', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='owner_number_profile', to='core.cardetail')),
-                ('vehicle_number_profile', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='vehicle_number_profile', to='core.cardetail')),
-                ('vehicle_type_profile', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='vehicle_type_profile', to='core.cardetail')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "owner_name_profile",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="owner_name_profile",
+                        to="core.cardetail",
+                    ),
+                ),
+                (
+                    "owner_number_profile",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="owner_number_profile",
+                        to="core.cardetail",
+                    ),
+                ),
+                (
+                    "vehicle_number_profile",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="vehicle_number_profile",
+                        to="core.cardetail",
+                    ),
+                ),
+                (
+                    "vehicle_type_profile",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="vehicle_type_profile",
+                        to="core.cardetail",
+                    ),
+                ),
             ],
         ),
     ]

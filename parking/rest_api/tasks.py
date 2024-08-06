@@ -1,22 +1,22 @@
-from celery import shared_task
-from django.core.mail import send_mail
 import logging
-from django.template.loader import render_to_string
-from django.core.mail import EmailMessage
 
+from celery import shared_task
+from django.core.mail import EmailMessage, send_mail
+from django.template.loader import render_to_string
 
 logger = logging.getLogger(__name__)
-html_content = render_to_string('email_template.html')
+html_content = render_to_string("email_template.html")
+
 
 @shared_task
 def send_registration_email(email):
-    print('ureeeeeeeee')
+    print("ureeeeeeeee")
     print(email, "email")
     try:
         send_mail(
-            'Registration Successful',
-            'Thank you for registering!',
-            'nepalicious.webapp@gmail.com',
+            "Registration Successful",
+            "Thank you for registering!",
+            "nepalicious.webapp@gmail.com",
             [email],
             fail_silently=False,
         )
@@ -24,7 +24,6 @@ def send_registration_email(email):
     except Exception as e:
         logger.error(f"Failed to send registration email to {email}: {str(e)}")
 
-       
         # html_content = render_to_string('email_template.html')  # Ensure email_template.html exists and is correctly formatted
         # email_msg = EmailMessage(
         #     'Registration Successful',  # Subject
