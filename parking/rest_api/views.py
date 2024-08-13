@@ -11,8 +11,10 @@ from rest_api.serializers import (
     ParkingSerializer,
     VehicleDetailSerializer,
     ParkingReportSerializer,
-    CommentSerializer,
-    DocumentSerializer
+    # CommentSerializer,
+    DocumentSerializer,
+    CommentCreateSerializer, CommentUpdateSerializer, CommentRetrieveSerializer,
+    BaseCommentSerializer, ContentSerializer
 )
 from rest_api.tasks import send_registration_email
 from rest_framework import generics, viewsets
@@ -300,63 +302,43 @@ class ImportParkingReport(APIView):
                 return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    
-    
 class DocumentViewSet(viewsets.ModelViewSet):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
-    parser_classes = (MultiPartParser, FormParser)
 
-    @action(detail=True, methods=['post'], url_path='annotate', parser_classes=[JSONParser])
+    @action(detail=True, methods=['post'], url_path='annotate')
     def annotate_pdf(self, request, pk=None):
-        try:
-            document = self.get_object()
-        except Document.DoesNotExist:
-            return Response({"detail": "No Document matches the given query."}, status=status.HTTP_404_NOT_FOUND)
-
-        comments_data = request.data.get('comments')
-        pdf_path = document.file.path
-        doc = fitz.open(pdf_path)
-        num_pages = len(doc)
-
-        for comment in comments_data:
-            if comment['page'] >= num_pages:
-                return Response({"detail": f"Page {comment['page']} not in document"}, status=status.HTTP_400_BAD_REQUEST)
-            comment['document'] = document.id
-
-        comments = CommentSerializer(data=comments_data, many=True)
-
-        if comments.is_valid():
-            comments.save()
-
-            comments_for_annotation = []
-            for comment in comments_data:
-                page = comment["page"]
-                content = comment["content"]
-                if comment.get("whole_page", False):
-                    bbox = (0, 0, doc.load_page(page).rect.width, doc.load_page(page).rect.height)
-                else:
-                    bbox = (comment["x1"], comment["y1"], comment["x2"], comment["y2"])
-                comments_for_annotation.append({
-                    "page": page,
-                    "bbox": bbox,
-                    "text": content
-                })
-
-            output_path = pdf_path.replace('.pdf', '_annotated.pdf')
-            add_comment_to_pdf(pdf_path, output_path, comments_for_annotation)
-
-            return Response({"status": "success", "message": "PDF annotated successfully"}, status=status.HTTP_200_OK)
-        return Response(comments.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    @action(detail=True, methods=['get'], url_path='comments')
-    def get_comments(self, request, pk=None):
         document = self.get_object()
-        comments = Comment.objects.filter(document=document)
-        serializer = CommentSerializer(comments, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        comments_data = request.data.get('comments', [])
+        
+        comments_serializer = CommentCreateSerializer(data=comments_data, many=True)
+        
+        if comments_serializer.is_valid():
+            comments_serializer.save()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            print("Validation errors:", comments_serializer.errors)
+            return Response(comments_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-
+    
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        if response.data.get('results', None):
+            response.data['results'] = response.data['results'][0] if len(response.data['results']) == 1 else response.data['results']
+        return response
+    
+    
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
+    serializer_class = CommentRetrieveSerializer
+
+    def retrieve(self, request, pk=None):
+        comment = self.get_object()
+        serializer = self.get_serializer(comment)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['get'], url_path='details')
+    def get_comment_details(self, request, pk=None):
+        comment = self.get_object()
+        serializer = CommentRetrieveSerializer(comment)
+        return Response(serializer.data, status=status.HTTP_200_OK)

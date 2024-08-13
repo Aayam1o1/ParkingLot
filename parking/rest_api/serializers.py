@@ -14,7 +14,8 @@ from rest_api.tasks import send_registration_email
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_api.models import Document, Comment
-
+import base64
+from django.core.files.base import ContentFile
 
 class ParkingSerializer(serializers.ModelSerializer):
     wing_name_en = serializers.CharField(required=True, allow_null=False)
@@ -186,13 +187,116 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 class ParkingReportSerializer(serializers.Serializer):
     file = serializers.FileField()
     
-
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
         fields = ['id', 'title', 'file']
 
-class CommentSerializer(serializers.ModelSerializer):
+class PositionSerializer(serializers.Serializer):
+    boundingRect = serializers.DictField()
+    rects = serializers.ListField(child=serializers.DictField())
+    pageNumber = serializers.IntegerField()
+
+class ContentSerializer(serializers.Serializer):
+    text = serializers.CharField()
+
+    def to_representation(self, instance):
+        return {"text": instance}
+
+class BaseCommentSerializer(serializers.ModelSerializer):
+    content = ContentSerializer()
+    position = PositionSerializer()
+    document = serializers.PrimaryKeyRelatedField(queryset=Document.objects.all())
+
     class Meta:
         model = Comment
-        fields = ['id', 'user', 'content', 'page', 'x1', 'y1', 'x2', 'y2', 'whole_page', 'document']
+        fields = ['id', 'comment', 'content', 'position', 'document', 'user', 'whole_page']
+
+class CommentCreateSerializer(serializers.ModelSerializer):
+    position = PositionSerializer()
+    comment = serializers.CharField()
+    content = serializers.CharField()
+
+    class Meta:
+        model = Comment
+        fields = ['comment', 'content', 'position', 'document', 'user']
+
+    def validate_comment(self, value):
+        if isinstance(value, dict) and 'text' in value:
+            return value['text']
+        if isinstance(value, str):
+            return value
+        raise serializers.ValidationError("Comment must be a string or an object with a 'text' key.")
+
+    def create(self, validated_data):
+        position_data = validated_data.pop('position', {})
+        bounding_rect = position_data.get('boundingRect', {})
+        page_number = position_data.get('pageNumber')
+
+        if page_number is None:
+            raise serializers.ValidationError({"detail": "Page number is required."})
+
+        comment = Comment.objects.create(
+            comment=validated_data.pop('comment', ''),
+            page=page_number,
+            x1=bounding_rect.get('x1'),
+            y1=bounding_rect.get('y1'),
+            x2=bounding_rect.get('x2'),
+            y2=bounding_rect.get('y2'),
+            width=bounding_rect.get('width'),
+            height=bounding_rect.get('height'),
+            **validated_data
+        )
+        return comment
+
+
+class CommentUpdateSerializer(BaseCommentSerializer):
+    def update(self, instance, validated_data):
+        content_data = validated_data.pop('content', {})
+        position_data = validated_data.pop('position', {})
+
+        boundingRect = position_data.get('boundingRect', {})
+        page_number = position_data.get('pageNumber')
+
+        if page_number is None:
+            raise serializers.ValidationError({"detail": "Page number is required."})
+
+        instance.comment = validated_data.get('comment', instance.comment)
+        instance.page = page_number
+
+        instance.x1 = boundingRect.get('x1', instance.x1)
+        instance.y1 = boundingRect.get('y1', instance.y1)
+        instance.x2 = boundingRect.get('x2', instance.x2)
+        instance.y2 = boundingRect.get('y2', instance.y2)
+        instance.width = boundingRect.get('width', instance.width)
+        instance.height = boundingRect.get('height', instance.height)
+
+        instance.save()
+        return instance
+class CommentRetrieveSerializer(serializers.ModelSerializer):
+    position = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Comment
+        fields = ['comment', 'content', 'position', 'document', 'user', 'created_at', 'updated_at']
+
+    def get_position(self, obj):
+        return {
+            'boundingRect': {
+                'x1': obj.x1,
+                'y1': obj.y1,
+                'x2': obj.x2,
+                'y2': obj.y2,
+                'width': obj.width,
+                'height': obj.height,
+            },
+            'rects': [{
+                'x1': obj.x1,
+                'y1': obj.y1,
+                'x2': obj.x2,
+                'y2': obj.y2,
+                'width': obj.width,
+                'height': obj.height,
+            }],
+            'pageNumber': obj.page,
+        }

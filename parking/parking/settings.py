@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 import environ
-
+from corsheaders.defaults import default_headers, default_methods
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(DEBUG=(bool, False))
@@ -33,9 +33,11 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
-CROS_ORIGIN_ALLOW_ALL = True
-
-
+CORS_ORIGIN_ALLOW_ALL=True
+CORS_ALLOW_CREDENTIAL=True
+CORS_ALLOWED_ORIGINS=["http://localhost:3000"]
+CSRF_COOKIE_HTTPONLY=True
+SESSION_COOKIE_HTTPONLY=True
 # Application definition
 
 INSTALLED_APPS = [
@@ -59,7 +61,9 @@ INSTALLED_APPS = [
     "import_export",
     "translations",
     "rosetta",
-    "corsheaders"
+    "corsheaders",
+    'drf_yasg',
+
    
 ]
 # INSTALLED_APPS = [

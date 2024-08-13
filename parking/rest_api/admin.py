@@ -29,7 +29,7 @@ class DocumentAdmin(admin.ModelAdmin):
     search_fields = ('title',)
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'document', 'content', 'page', 'x1', 'y1', 'x2', 'y2')
+    list_display = ('id', 'user', 'document', 'content', 'page', 'x1', 'y1', 'x2', 'y2', 'height', 'width')
     search_fields = ('content', 'document__title', 'user__username')
     list_filter = ('document', 'user', 'page')
 

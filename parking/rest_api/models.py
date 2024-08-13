@@ -134,7 +134,8 @@ class Document(models.Model):
 class Comment(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     document = models.ForeignKey(Document, related_name='comments', on_delete=models.CASCADE)
-    content = models.TextField()
+    content = models.CharField()
+    comment = models.TextField()
     page = models.IntegerField()
     x1 = models.FloatField(null=True, blank=True)
     y1 = models.FloatField(null=True, blank=True)
@@ -143,6 +144,12 @@ class Comment(models.Model):
     whole_page = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    width = models.PositiveIntegerField(null=True, blank=True)
+    height = models.PositiveIntegerField(null=True, blank=True)
 
     def __str__(self):
         return f"Comment by {self.user} on page {self.page}"
+    
+    @property
+    def document_url(self):
+        return self.document.url
