@@ -5,6 +5,7 @@ from django.contrib.auth.models import (
 )
 from django.db import models
 from django.utils import timezone
+from modeltranslation.translator import translator, TranslationOptions
 
 
 # Create your models here.
@@ -12,8 +13,14 @@ class Parking(models.Model):
     wing_name = models.CharField(max_length=50)
     is_available = models.BooleanField(default=True)
 
+    
     def __str__(self):
         return self.wing_name
+    
+# class ParkingTranslationOptions(TranslationOptions):
+#     fields = ('wing_name',)
+
+# translator.register(Parking, ParkingTranslationOptions)
 
 
 class VehicleDetail(models.Model):
@@ -44,6 +51,8 @@ class ParkingDetail(models.Model):
 
         vehicle_details = ", ".join(vehicle_info)
         return f"Parking: {self.parking_wing}, Vehicles: {vehicle_details}"
+    
+    
 
 
 class CustomUserManager(BaseUserManager):
@@ -114,3 +123,33 @@ class VehicleOwner(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class Document(models.Model):
+    title = models.CharField(max_length=255)
+    file = models.FileField(upload_to='documents/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    
+    
+class Comment(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    document = models.ForeignKey(Document, related_name='comments', on_delete=models.CASCADE)
+    content = models.CharField()
+    comment = models.TextField()
+    page = models.IntegerField()
+    x1 = models.FloatField(null=True, blank=True)
+    y1 = models.FloatField(null=True, blank=True)
+    x2 = models.FloatField(null=True, blank=True)
+    y2 = models.FloatField(null=True, blank=True)
+    whole_page = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    width = models.PositiveIntegerField(null=True, blank=True)
+    height = models.PositiveIntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Comment by {self.user} on page {self.page}"
+    
+    @property
+    def document_url(self):
+        return self.document.url

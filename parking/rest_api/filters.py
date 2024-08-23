@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
 
-from .models import ParkingDetail
+from rest_api.models import ParkingDetail
 
 
 class ParkingDetailFilter(filters.FilterSet):

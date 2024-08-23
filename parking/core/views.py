@@ -4,9 +4,14 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView, ListView
+from django.http import HttpResponse
 
 from .forms import addVehicleForm, editVehicleForm, parkingWingForm
 from .models import *
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext
+from django.utils import translation
+from django.conf import settings
 
 
 def car_detail_view(request):
@@ -21,6 +26,7 @@ def car_detail_view(request):
     webpage index to render car and wing details
 
     """
+    # output = gettext("Welcome to my site.")
 
     cars = CarDetail.objects.all()
     wings = Parking.objects.filter(is_available=True)
@@ -30,6 +36,7 @@ def car_detail_view(request):
         "wings": wings,
         "parking": parking,
     }
+    # return HttpResponse(output)
     return render(request, "index.html", context)
 
 
@@ -244,6 +251,8 @@ class CarDetailView(ListView):
     context_object_name = "cars"
 
     def get_queryset(self):
+        print(_("Welcome to our site"))
+
         queryset = super().get_queryset()
         date_filter = self.request.GET.get("date_filter")
         if date_filter:
@@ -272,6 +281,10 @@ class CarDetailView(ListView):
         context["var"] = Var[0]
         context["car_detail"] = car_detail
 
+        # Add translated text
+        context["filter_label"] = _("Filter by date")
+        context["no_results_message"] = _("No results found.")
+        
         return context
 
 
@@ -334,3 +347,12 @@ class OwnerProfileView(DetailView):
         # car_detail = CarDetail.objects.get(id=car_id)
         context["object"] = OwnerProfile.objects.get(owned_car__id=car_id)
         return context
+    
+def set_language(request):
+    language = request.POST.get('language')
+    if language:
+        translation.activate(language)
+        response = redirect(request.POST.get('next'))
+        response.set_cookie(settings.LANGUAGE_COOKIE_NAME, language)
+        return response
+    return redirect('/')

@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-30 15:41+0545\n"
+"PO-Revision-Date: 2024-07-30 15:43+0545\n"
+"Last-Translator:   <aayam@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Translated-Using: django-rosetta 0.10.0\n"
+
+#: .\core\views.py:254
+msgid "Welcome to our site"
+msgstr ""
+
+#: .\core\views.py:285
+msgid "Filter by date"
+msgstr ""
+
+#: .\core\views.py:286
+msgid "No results found."
+msgstr ""
+
+#: .\templates\index2.html:8 .\templates\index2.html:25
+msgid "This is class based"
+msgstr ""
+
+#: .\templates\index2.html:29
+msgid "Parking"
+msgstr ""
+
+#: .\templates\index2.html:30
+msgid "Car"
+msgstr ""
+
+#: .\templates\index2.html:31
+msgid "Home"
+msgstr ""
+
+#: .\templates\index2.html:44
+msgid "Car Number"
+msgstr ""
