@@ -323,15 +323,17 @@ class DocumentViewSet(viewsets.ModelViewSet):
     
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
+        print("Comments fetched:", len(response.data.get('results', [])))
         if response.data.get('results', None):
             response.data['results'] = response.data['results'][0] if len(response.data['results']) == 1 else response.data['results']
         return response
     
     
 class CommentViewSet(viewsets.ModelViewSet):
-    queryset = Comment.objects.all()
+    queryset = Comment.objects.all().order_by('-created_at')
     serializer_class = CommentRetrieveSerializer
-
+    pagination_class = None 
+    
     def retrieve(self, request, pk=None):
         comment = self.get_object()
         serializer = self.get_serializer(comment)
